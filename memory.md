@@ -3,58 +3,45 @@
 ## Current checkpoint
 
 PROJECT: Prompt Folio
-CURRENT PHASE: Phase 1 — Discovery & Requirements → Phase 2/3 foundation
-STATUS: IN_PROGRESS
+CURRENT PHASE: Phase 4 — Interactive portfolio behavior / deployment & quality hardening
+STATUS: PARTIAL
 
 ### What was inspected
-- Git repository `Student-Cybrarians/mokshith-ai-security` on `master-branch`.
-- Repository initially contained the seven project/engineering Markdown source files and no application source, package manifest, résumé PDFs, CNAME, or existing frontend tree.
-- Read `memory.md`, `architecture.md`, `design.md`, `rules.md`, `phases.doc.md`, `prompt-folio-munder-difflin-build-prompt.md`, and `MASTER-PROMPT-MICHAEL.md` directly from Git.
-- Confirmed source hierarchy: implementation/runtime evidence > tests > Git state > approved docs > verified source material > memory > assumption.
+- Git repository `Student-Cybrarians/mokshith-ai-security` on `master-branch` and repair branch `munder-difflin/phase-4-repair`.
+- Existing static frontend: `index.html`, `styles.css`, `app.js`, `404.html`, `CNAME`, and validation workflow.
+- Authoritative project/engineering documents and prior memory checkpoint were preserved as the source hierarchy.
+- Repository search for PDF assets returned no `.pdf` files.
 
-### Decisions
-- Because no framework or dependency configuration exists, use a dependency-free static-first frontend for the initial foundation rather than inventing a framework.
-- Keep portfolio content in structured JavaScript data and keep the chatbot deterministic/grounded until a justified server-side AI integration and credentials are supplied.
-- Do not fabricate résumé URLs, contact links, education, project technologies, metrics, dates, or outcomes.
-- Résumé PDF access is explicitly blocked until the two real PDF assets are supplied.
-
-### Implemented on branch
-`munder-difflin/phase-1-foundation`
-
-Files added:
-- `index.html` — accessible responsive portfolio shell and information architecture.
-- `styles.css` — restrained semantic design system, responsive layout, focus states, reduced-motion support.
-- `app.js` — structured portfolio data, project filters, deterministic grounded assistant, mobile navigation.
-- `CNAME` — `mokshith-ai-security.is-a.dev` for GitHub Pages compatibility.
-- `404.html` — accessible fallback page.
-- `.github/workflows/validate.yml` — CI syntax/file/content validation.
+### Repairs implemented on repair branch
+- Added `.github/workflows/deploy-pages.yml` for GitHub Pages deployment from `master-branch`.
+- Added `robots.txt` and `sitemap.xml` using the verified canonical hostname.
+- Hardened dynamic portfolio rendering with HTML escaping and DOM text construction for visitor-controlled chat content.
+- Added native accessible `<details>` evidence/status expansion to project cards.
+- Added `aria-pressed` state to project filters and Escape-key/focus behavior for the mobile navigation.
+- Expanded CI validation to cover SEO files, canonical host, required assets, grounded content, and obvious credential patterns.
 
 ### Verified facts used
 - TechCiti Technologies Private Limited — Cyber Security Analyst Intern.
 - InAmigos Foundation (IAF) — Prompt Engineer Intern.
 - Project names/statuses and skill/certification classifications only where explicitly present in the repository specification.
 
-### Blockers
+### Remaining blockers
 1. Two résumé PDFs are absent from the repository.
 2. Verified public email/GitHub/LinkedIn URLs are absent from the repository.
 3. Verified education records are absent from the repository.
 4. Detailed project technology stacks, links, results, and dates require source material before publication.
-5. Production deployment has not yet been configured or verified.
+5. GitHub Pages production reachability and custom-domain behavior require live deployment verification; repository tooling does not itself prove production reachability.
 
-### Current implementation status
-Foundation commit: `b932d314a5cca49ea73882699eca3ffef571c90a`.
-Validation/checkpoint commit: `f49481f4ccc186777723aa279ea37aac8b22ce00`.
-Runtime/browser validation is still required before marking the foundation VERIFIED.
-
-### Next highest-priority task
-Validate the static site through CI/runtime evidence, review the pull request, then continue with résumé/source blockers and deployment configuration.
+### Validation state
+- Repair branch head: `ba874164dae7c2f967cc23947a5be0db96a1d19b`.
+- GitHub Actions validation run `34273384279` was observed in `queued` state at checkpoint time; no passing conclusion was available yet.
+- Local browser/runtime validation remains unavailable because the execution environment cannot clone GitHub over the network.
 
 ## Agent handoff
-TASK: Build initial Prompt Folio foundation after reconnaissance.
-WHAT WAS INSPECTED: repository tree and all authoritative engineering/product documents plus memory.
-WHAT WAS CHANGED: static frontend foundation, deterministic grounded assistant, GitHub Pages CNAME, 404 page, CI validation, checkpoint.
-WHAT WAS TESTED: source-level consistency review; CI runtime validation pending.
-RESULT: IMPLEMENTED / UNVERIFIED.
-EVIDENCE: foundation commit `b932d314a5cca49ea73882699eca3ffef571c90a`; checkpoint/CI commit `f49481f4ccc186777723aa279ea37aac8b22ce00`.
-BLOCKERS: résumé PDFs, verified public contact URLs, education records, detailed project evidence, production deployment.
-NEXT RECOMMENDATION: inspect CI result and PR diff; fix any failures before merge.
+TASK: Repair and harden Prompt Folio after foundation merge.
+WHAT WAS INSPECTED: current master files, CI workflow, missing deployment/SEO files, and repository PDF search.
+WHAT WAS CHANGED: deployment workflow, robots/sitemap, safer rendering, accessible project detail interactions, improved mobile/filter semantics, stronger CI checks.
+WHAT WAS TESTED: repository search found no PDF assets; GitHub Actions run was queued; source-level review completed. Production/browser verification remains pending.
+RESULT: PARTIAL / UNVERIFIED.
+EVIDENCE: repair branch head `ba874164dae7c2f967cc23947a5be0db96a1d19b`; validation run `34273384279` queued.
+NEXT RECOMMENDATION: wait for CI result, inspect failures if any, merge the repair PR only after checks pass, then verify GitHub Pages deployment and custom hostname over HTTP.
