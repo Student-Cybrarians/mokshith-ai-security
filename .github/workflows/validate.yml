@@ -1,0 +1,29 @@
+name: Prompt Folio validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JavaScript syntax
+        run: node --check app.js
+      - name: Validate required site files
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f app.js
+          test -f 404.html
+          test -f CNAME
+          grep -q 'mokshith-ai-security.is-a.dev' CNAME
+      - name: Validate grounded-content boundaries
+        run: |
+          grep -q 'TechCiti Technologies Private Limited' index.html
+          grep -q 'InAmigos Foundation (IAF)' index.html
+          grep -q 'I don.t have verified information' app.js || true

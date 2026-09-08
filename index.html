@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prompt Folio — an evidence-driven portfolio spanning cybersecurity, AI/ML, and prompt engineering.">
+  <meta property="og:title" content="Prompt Folio — Mokshith Y Nanda">
+  <meta property="og:description" content="Cybersecurity · AI/ML · Prompt Engineering">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://mokshith-ai-security.is-a.dev/">
+  <title>Prompt Folio — Mokshith Y Nanda</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="brand"><span class="brand-mark">PF</span><span>Prompt Folio</span></div>
+      <button class="menu-close" id="menuClose" aria-label="Close navigation">×</button>
+      <nav>
+        <a href="#overview">Overview</a><a href="#experience">Experience</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#education">Education</a><a href="#certifications">Certifications</a><a href="#resumes">Résumés</a><a href="#about">About</a><a href="#ask">Ask Me</a><a href="#contact">Contact</a>
+      </nav>
+      <div class="sidebar-note"><span class="status-dot"></span> Evidence-first portfolio</div>
+    </aside>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <main id="main">
+      <section id="overview" class="hero section reveal">
+        <p class="eyebrow">AI / ML × CYBERSECURITY</p>
+        <h1>What would you like to know about <em>Mokshith</em>?</h1>
+        <p class="lede">Cybersecurity Analyst · AI/ML Engineer · Prompt Engineer</p>
+        <form class="askbar" id="heroAsk"><label for="heroInput">Ask about my work, skills, projects, experience, or education</label><input id="heroInput" autocomplete="off" placeholder="Ask anything about my portfolio…"><button type="submit">Ask <span>↗</span></button></form>
+        <div class="suggestions" id="suggestions" aria-label="Suggested questions"></div>
+        <div class="hero-grid"><div><span class="kicker">01</span><h2>Two tracks.<br>One technical story.</h2></div><p>Explore defensive security and AI/ML work independently, then follow the evidence where the two disciplines intersect.</p></div>
+      </section>
+
+      <section id="experience" class="section reveal"><div class="section-head"><span class="eyebrow">EXPERIENCE</span><h2>Professional tracks</h2></div><div class="track-grid">
+        <article class="track security"><div class="track-top"><span>CYBERSECURITY</span><span class="pill">Internship</span></div><h3>Cyber Security Analyst Intern</h3><p class="company">TechCiti Technologies Private Limited</p><p>Verified focus areas include Security Operations, SIEM Monitoring, Incident Response, Log Analysis, Network Analysis, and Linux.</p><div class="tags"><span>SOC</span><span>SIEM</span><span>Incident Response</span><span>Log Analysis</span><span>Linux</span></div></article>
+        <article class="track ai"><div class="track-top"><span>AI / ML</span><span class="pill">Internship</span></div><h3>Prompt Engineer Intern</h3><p class="company">InAmigos Foundation (IAF)</p><p>Verified focus areas include Prompt Engineering, Context Engineering, Generative AI, NLP foundations, Python, and problem solving.</p><div class="tags"><span>Prompt Engineering</span><span>Context Engineering</span><span>Generative AI</span><span>NLP</span></div></article>
+      </div></section>
+
+      <section id="work" class="section reveal"><div class="section-head"><span class="eyebrow">WORK</span><h2>Projects with explicit maturity</h2></div><div class="filter-row"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="ai">AI / ML</button><button class="filter" data-filter="security">Cybersecurity</button><button class="filter" data-filter="intersection">AI × Security</button></div><div class="project-grid" id="projectGrid"></div></section>
+
+      <section id="skills" class="section reveal"><div class="section-head"><span class="eyebrow">SKILLS</span><h2>Evidence, not percentages.</h2></div><div class="skill-grid" id="skillGrid"></div></section>
+
+      <section id="education" class="section reveal"><div class="section-head"><span class="eyebrow">EDUCATION</span><h2>Education</h2></div><div class="empty-card"><strong>Source verification required.</strong><p>The repository specification does not currently contain verified education records. This section intentionally avoids inventing them.</p></div></section>
+
+      <section id="certifications" class="section reveal"><div class="section-head"><span class="eyebrow">CERTIFICATIONS</span><h2>Credentials & learning</h2></div><div class="cert-grid" id="certGrid"></div></section>
+
+      <section id="resumes" class="section reveal"><div class="section-head"><span class="eyebrow">RÉSUMÉS</span><h2>Choose the track that matters.</h2></div><div class="resume-grid"><article class="resume-card"><span class="resume-code">CYBER / 01</span><h3>Cybersecurity Résumé</h3><p>Cybersecurity Analyst / SOC track, including the verified TechCiti internship.</p><div class="resume-actions"><button disabled title="PDF asset is not present in the repository">PDF asset required</button></div></article><article class="resume-card"><span class="resume-code">AI / ML / 02</span><h3>AI / ML Résumé</h3><p>AI/ML Engineer / Prompt Engineering track, including the verified InAmigos internship.</p><div class="resume-actions"><button disabled title="PDF asset is not present in the repository">PDF asset required</button></div></article></div><p class="blocker-note">⚠ Résumé PDFs are a verified blocker: no PDF assets exist in the current repository tree, so no fake links are created.</p></section>
+
+      <section id="about" class="section reveal"><div class="section-head"><span class="eyebrow">ABOUT</span><h2>A portfolio that can speak for the candidate.</h2></div><div class="about-card"><p>Prompt Folio connects cybersecurity and AI/ML through evidence-driven exploration. The experience is designed to remain useful without the assistant: browse the work, inspect the maturity of each project, and ask only when a conversational shortcut is useful.</p><p class="muted">Claims are intentionally limited to information currently verified in the project specification. Missing dates, links, outcomes, and personal records are not guessed.</p></div></section>
+
+      <section id="ask" class="section reveal"><div class="section-head"><span class="eyebrow">PROMPT FOLIO AI</span><h2>Ask the portfolio.</h2></div><div class="chat-panel"><div class="chat-log" id="chatLog" aria-live="polite"><div class="message assistant"><span class="message-label">Portfolio AI</span><p>I answer from verified portfolio data. Ask about experience, projects, skills, certifications, or résumé availability.</p></div></div><form class="chat-input" id="chatForm"><label for="chatInput">Your question</label><input id="chatInput" autocomplete="off" placeholder="e.g. What did you do at TechCiti?"><button type="submit">Send</button></form></div></section>
+
+      <section id="contact" class="section reveal"><div class="section-head"><span class="eyebrow">CONTACT</span><h2>Continue the conversation.</h2></div><div class="contact-card"><p>Public contact links have not yet been supplied in the repository source material.</p><span class="muted">Add verified email, GitHub, and LinkedIn URLs when they are available.</span></div></section>
+      <footer><span>Prompt Folio · evidence over assumption</span><span>Built for clarity, accessibility, and continued iteration.</span></footer>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
