@@ -1,273 +1,1113 @@
-# Prompt Folio — Architecture
+# Prompt Folio --- Architecture
 
-## 1. System Intent
+## High-Level Design and Structure of the Application
 
-Prompt Folio is a premium, interactive, conversational portfolio that presents two professional tracks without blending or fabricating them:
+Prompt Folio is a responsive, conversational portfolio application for a
+technology professional with two primary tracks:
 
-1. Cybersecurity
-2. AI / ML / Prompt Engineering
+-   Cybersecurity
+-   AI / ML + Prompt Engineering
 
-The architecture must make the two tracks independently discoverable while preserving one coherent personal brand and user experience.
+The system combines a premium portfolio interface, structured
+professional data, résumé access, project exploration, and an AI
+portfolio chatbot.
 
-## 2. Core Information Architecture
+------------------------------------------------------------------------
 
-Primary navigation:
+# 1. ARCHITECTURE
 
-- Overview
-- Experience
-- Projects
-- Skills
-- Education
-- About
-- Résumés
-- Contact
+## 1.1 System Overview
 
-The application should also provide a conversational portfolio assistant that can answer questions about verified portfolio content.
+``` text
+                         ┌──────────────────────────┐
+                         │        VISITOR           │
+                         └────────────┬─────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │     PROMPT FOLIO UI      │
+                         │  Responsive Web Frontend │
+                         └────────────┬─────────────┘
+                                      │
+                 ┌────────────────────┼────────────────────┐
+                 │                    │                    │
+                 ▼                    ▼                    ▼
+        ┌────────────────┐   ┌────────────────┐   ┌────────────────┐
+        │ Portfolio      │   │ Project /      │   │ Résumé Center  │
+        │ Navigation     │   │ Experience UI  │   │ PDF Access     │
+        └───────┬────────┘   └───────┬────────┘   └────────────────┘
+                │                    │
+                └──────────┬─────────┘
+                           ▼
+                 ┌────────────────────┐
+                 │ Portfolio Data     │
+                 │ Structured Content │
+                 └─────────┬──────────┘
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │ Portfolio AI       │
+                 │ Chatbot            │
+                 └─────────┬──────────┘
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │ AI / Retrieval     │
+                 │ Layer              │
+                 └────────────────────┘
+```
 
-## 3. Career Tracks
+The frontend remains usable without the chatbot. AI is an enhancement to
+the portfolio experience, not a single point of failure for basic
+navigation.
 
-### Cybersecurity
+------------------------------------------------------------------------
 
-Verified experience:
+# 2. APPLICATION COMPONENTS
 
-- TechCiti Technologies Private Limited — Cyber Security Analyst Intern
-
-### AI / ML / Prompt Engineering
-
-Verified experience:
-
-- InAmigos Foundation (IAF) — Prompt Engineer Intern
-
-Do not invent employers, dates, responsibilities, achievements, metrics, technologies, certifications, projects, or education details.
-
-## 4. Application Layers
-
-### Presentation Layer
+## 2.1 Presentation Layer
 
 Responsible for:
 
-- responsive page composition
-- navigation
-- typography
-- visual hierarchy
-- motion
-- accessible interaction states
-- project and experience presentation
-- résumé actions
-- conversational UI
+-   Navigation
+-   Hero section
+-   Profile/work switcher
+-   Experience pages
+-   Project cards
+-   Project detail pages
+-   Skills
+-   Education
+-   Certifications
+-   Résumé center
+-   About
+-   Contact
+-   Chatbot interface
+-   Responsive layouts
+-   Animations
 
-### Content Layer
+------------------------------------------------------------------------
 
-Responsible for structured portfolio data:
+## 2.2 Portfolio Content Layer
 
-- profile
-- career tracks
-- experience
-- projects
-- skills
-- education
-- about
-- contact
-- résumé metadata
-- chatbot knowledge
+The portfolio content should be represented as structured records rather
+than duplicated throughout UI components.
 
-Content should be kept separate from UI components so that verified facts can be updated without rewriting presentation logic.
+Core entities:
 
-### Conversational Layer
-
-The portfolio chatbot must:
-
-- answer only from verified portfolio information
-- distinguish facts from uncertainty
-- avoid hallucinating credentials or experience
-- refuse requests for secrets or private information
-- provide a safe fallback when information is unavailable
-
-A retrieval layer may be introduced if the knowledge base becomes sufficiently large, but unnecessary infrastructure should not be added merely for appearance.
-
-### Delivery Layer
-
-Target domain:
-
-`mokshith-ai-security.is-a.dev`
-
-The existing is-a.dev registration uses a CNAME pointing to:
-
-`student-cybrarians.github.io`
-
-Deployment architecture must account for this existing DNS arrangement and GitHub Pages compatibility.
-
-## 5. Component Architecture
-
-Build reusable components for:
-
-- header/navigation
-- mobile navigation
-- hero/overview section
-- career-track switcher
-- experience cards
-- project cards
-- skill groups
-- education cards
-- résumé cards/actions
-- contact section
-- chatbot launcher
-- chatbot panel
-- footer
-- 404 page
-
-Components should have predictable states:
-
-- default
-- hover
-- focus-visible
-- active/selected
-- disabled where applicable
-- loading
-- empty
-- error
-
-## 6. Data Architecture
-
-Prefer typed, structured content objects rather than duplicating portfolio facts inside JSX/TSX.
-
-Example conceptual shape:
-
-```text
-Portfolio
-├── profile
-├── tracks[]
-│   ├── id
-│   ├── label
-│   ├── summary
-│   ├── experience[]
-│   ├── projects[]
-│   └── skills[]
-├── education[]
-├── resumes[]
-├── contact
-└── chatbotKnowledge
+``` text
+Candidate
+Experience
+Project
+Skill
+Certification
+Education
+Résumé
+Link
 ```
 
-The actual implementation may adapt this structure to the selected framework, provided the separation of content and presentation remains clear.
+Relationships:
 
-## 7. Résumé Architecture
+``` text
+Experience ──────► Skills
+Experience ──────► Résumé Track
 
-There are two distinct résumé assets/actions:
+Project ─────────► Skills
+Project ─────────► Experience
+Project ─────────► Category
 
-- Cybersecurity résumé PDF
-- AI / ML / Prompt Engineering résumé PDF
+Candidate ───────► Experiences
+Candidate ───────► Projects
+Candidate ───────► Skills
+Candidate ───────► Education
+Candidate ───────► Certifications
+Candidate ───────► Résumés
+```
 
-Each must have its own:
+------------------------------------------------------------------------
 
-- label
-- view action
-- download action
-- file path/URL
+# 3. PROFILE TRACKS
 
-Do not merge the two into one generic résumé action.
+Prompt Folio should support two professional tracks.
 
-If the source PDFs are not available, do not fabricate PDF contents. Surface the implementation dependency as a blocker.
+## Cybersecurity Track
 
-## 8. Responsive Architecture
+``` text
+Cybersecurity
+│
+├── TechCiti Experience
+├── Cybersecurity Projects
+├── Security Skills
+├── Security Certifications
+└── Cybersecurity Résumé
+```
 
-Target:
+## AI / ML Track
 
-- mobile
-- tablet
-- desktop
-- large desktop
+``` text
+AI / ML
+│
+├── InAmigos Experience
+├── AI / ML Projects
+├── Prompt Engineering
+├── AI / ML Skills
+└── AI / ML Résumé
+```
 
-The mobile experience is not a collapsed desktop afterthought. Navigation, cards, spacing, chatbot controls, résumé actions, and project layouts must remain usable on touch devices.
+## Combined Track
 
-## 9. Accessibility Architecture
+``` text
+AI × Cybersecurity
+│
+└── AI-IDS-ES
+```
 
-Minimum requirements:
+The combined track demonstrates how the two areas intersect without
+implying professional experience that is not supported by the source
+material.
 
-- semantic HTML
-- keyboard navigation
-- visible focus states
-- correct heading hierarchy
-- accessible labels
-- meaningful link/button names
-- sufficient contrast
-- screen-reader-friendly interactive controls
-- reduced-motion support
-- no keyboard traps
+------------------------------------------------------------------------
 
-Chatbot interactions must also be accessible by keyboard and assistive technology.
+# 4. PORTFOLIO AI ARCHITECTURE
 
-## 10. Motion Architecture
+The chatbot should use structured portfolio information as its source of
+truth.
 
-Motion should communicate hierarchy and state rather than exist as decoration.
+``` text
+Visitor Question
+       │
+       ▼
+Chat UI
+       │
+       ▼
+Request Handler
+       │
+       ▼
+Question Classification
+       │
+       ├── Experience
+       ├── Project
+       ├── Skill
+       ├── Résumé
+       ├── Education
+       ├── Certification
+       └── General Portfolio
+       │
+       ▼
+Portfolio Knowledge
+       │
+       ▼
+Grounded AI Response
+       │
+       ▼
+Answer + Relevant Navigation
+```
 
-Use:
+The chatbot should not rely on unsupported assumptions.
 
-- subtle page/section reveals
-- intentional hover/focus transitions
-- track-switch transitions
-- chatbot open/close transitions
-- project-card interaction feedback
+For information that is not present in the verified portfolio data:
 
-Respect `prefers-reduced-motion` and provide a low-motion path.
+> I don't have verified information about that in the portfolio.
 
-## 11. Security Architecture
+------------------------------------------------------------------------
 
-The portfolio is public-facing and must be treated as an application, not merely a static design.
+# 5. CHATBOT KNOWLEDGE MODEL
 
-Requirements:
+A structured knowledge representation should contain:
 
-- no secrets in source control
-- no API keys embedded in client-side code
-- sanitize/escape untrusted chatbot content where applicable
-- validate external links
-- minimize third-party dependencies
-- avoid unnecessary data collection
-- document any server-side secret handling
+``` text
+candidate.json
+experiences.json
+projects.json
+skills.json
+education.json
+certifications.json
+resumes.json
+links.json
+```
 
-## 12. Performance Architecture
+Example conceptual structure:
 
-Priorities:
+``` json
+{
+  "experience": {
+    "company": "TechCiti Technologies Private Limited",
+    "role": "Cyber Security Analyst Intern",
+    "skills": [
+      "Security Operations (SOC)",
+      "SIEM Monitoring",
+      "Incident Response",
+      "Log Analysis",
+      "Linux"
+    ]
+  }
+}
+```
 
-- fast initial render
-- optimized images/assets
-- minimal JavaScript where practical
-- lazy loading for non-critical media
-- efficient font loading
-- avoid unnecessary animation work
-- avoid heavyweight infrastructure without demonstrated need
+The actual implementation should preserve verified source information
+and should not fabricate missing facts.
 
-## 13. Testing Architecture
+------------------------------------------------------------------------
 
-At minimum, verify:
+# 6. EXPERIENCE DATA
 
-- build succeeds
-- pages/routes render
-- navigation works
-- résumé links/actions work
-- chatbot behavior is grounded
-- mobile layout works
-- keyboard navigation works
-- reduced-motion behavior works
-- no obvious console/runtime errors
+## TechCiti
 
-Automated tests should be used where they provide meaningful regression protection.
+``` text
+Role
+└── Cyber Security Analyst Intern
 
-## 14. Deployment Architecture
+Organization
+└── TechCiti Technologies Private Limited
 
-The implementation should be deployable from the GitHub repository and compatible with the intended `.is-a.dev` hostname.
+Location
+└── Bengaluru, Karnataka, India
 
-Deployment configuration must be explicit and verifiable. Do not claim the site is deployed until the deployment has actually been tested.
+Work Type
+└── Remote
 
-## 15. Architecture Quality Gate
+Employment
+└── Internship
 
-Before declaring the architecture complete, verify:
+Skills
+├── Security Operations (SOC)
+├── SIEM Monitoring
+├── Incident Response
+├── Log Analysis
+└── Linux
+```
 
-- two career tracks are structurally distinct
-- verified content is separated from presentation
-- résumé assets have independent paths/actions
-- chatbot knowledge is grounded
-- responsive and accessibility requirements are represented
-- secrets are excluded
-- deployment assumptions match the actual domain configuration
-- implementation is simple enough to maintain
+The detailed highlights should include the verified internship
+responsibilities supplied for the portfolio.
+
+------------------------------------------------------------------------
+
+## InAmigos
+
+``` text
+Role
+└── Prompt Engineer Intern
+
+Organization
+└── InAmigos Foundation (IAF)
+
+Location
+└── India
+
+Work Type
+└── Remote
+
+Employment
+└── Internship
+
+Skills
+├── Prompt Engineering
+├── Generative AI Tools
+├── Natural Language Processing (NLP)
+├── Problem Solving
+└── Context Engineering
+```
+
+The detailed highlights should reflect the supplied role description.
+
+------------------------------------------------------------------------
+
+# 7. PROJECT ARCHITECTURE
+
+Projects should be data-driven.
+
+``` text
+Projects
+│
+├── Human-Detection
+│
+├── IntelliHire-v3
+│
+├── AI-IDS-ES
+│
+└── Personal Portfolio Website
+```
+
+Each project record should support:
+
+``` text
+id
+title
+slug
+description
+category
+status
+technologies
+skills
+role
+timeline
+repository
+liveDemo
+images
+research
+implementation
+results
+limitations
+futureWork
+relatedExperience
+```
+
+Optional fields should remain optional.
+
+Do not create fake metrics, repositories, demos, or results.
+
+------------------------------------------------------------------------
+
+# 8. PROJECT STATUS MODEL
+
+Project maturity must be explicit.
+
+``` text
+Production
+Prototype
+Research
+Concept
+Design Stage
+Academic
+Early Stage
+```
+
+For the currently supplied projects:
+
+``` text
+Human-Detection
+→ Concept / Planning Stage
+
+IntelliHire-v3
+→ Early Prototype
+
+AI-IDS-ES
+→ Design Stage
+
+Personal Portfolio Website
+→ Earlier Web Development Project
+```
+
+The UI should visibly communicate project maturity.
+
+------------------------------------------------------------------------
+
+# 9. RÉSUMÉ ARCHITECTURE
+
+The résumé center provides two independent résumé paths.
+
+``` text
+Résumé Center
+│
+├── Cybersecurity Résumé
+│   ├── View
+│   └── Download PDF
+│
+└── AI / ML Résumé
+    ├── View
+    └── Download PDF
+```
+
+The résumé records should contain:
+
+``` text
+title
+track
+pdfPath
+displayName
+description
+```
+
+The chatbot should be able to route visitors to the appropriate résumé.
+
+Examples:
+
+``` text
+"Show me the cybersecurity résumé."
+        ↓
+Cybersecurity Résumé
+
+"Show me the AI résumé."
+        ↓
+AI / ML Résumé
+```
+
+------------------------------------------------------------------------
+
+# 10. NAVIGATION ARCHITECTURE
+
+Desktop:
+
+``` text
+┌───────────────┬───────────────────────────────────────┐
+│               │                                       │
+│ Prompt Folio  │             Main Content              │
+│               │                                       │
+│ Overview      │                                       │
+│ Experience    │                                       │
+│ Projects      │                                       │
+│ Skills        │                                       │
+│ Education     │                                       │
+│ Résumés       │                                       │
+│ About         │                                       │
+│ Contact       │                                       │
+│               │                                       │
+└───────────────┴───────────────────────────────────────┘
+```
+
+Mobile:
+
+``` text
+┌──────────────────────────────┐
+│ Logo / Name       Menu       │
+├──────────────────────────────┤
+│                              │
+│        Main Content          │
+│                              │
+└──────────────────────────────┘
+```
+
+The navigation must remain accessible using keyboard and touch
+interaction.
+
+------------------------------------------------------------------------
+
+# 11. FOLDER & FILE STRUCTURE
+
+The exact structure should adapt to the existing repository/framework
+after reconnaissance.
+
+A recommended conceptual structure is:
+
+``` text
+prompt-folio/
+│
+├── app/
+│   ├── routes/
+│   │   ├── overview/
+│   │   ├── experience/
+│   │   ├── projects/
+│   │   ├── skills/
+│   │   ├── education/
+│   │   ├── certifications/
+│   │   ├── resumes/
+│   │   ├── about/
+│   │   ├── contact/
+│   │   └── ask/
+│   │
+│   ├── components/
+│   │   ├── navigation/
+│   │   ├── hero/
+│   │   ├── experience/
+│   │   ├── projects/
+│   │   ├── skills/
+│   │   ├── resumes/
+│   │   ├── chatbot/
+│   │   └── shared/
+│   │
+│   ├── data/
+│   │   ├── candidate
+│   │   ├── experiences
+│   │   ├── projects
+│   │   ├── skills
+│   │   ├── education
+│   │   ├── certifications
+│   │   └── resumes
+│   │
+│   ├── lib/
+│   │   ├── ai/
+│   │   ├── retrieval/
+│   │   ├── navigation/
+│   │   └── validation/
+│   │
+│   └── styles/
+│
+├── public/
+│   ├── images/
+│   ├── icons/
+│   └── resumes/
+│       ├── cybersecurity.pdf
+│       └── ai-ml.pdf
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   ├── e2e/
+│   ├── accessibility/
+│   └── chatbot/
+│
+├── docs/
+│   ├── PRD.md
+│   ├── architecture.md
+│   └── checkpoints/
+│
+└── README.md
+```
+
+**Important:** this is the recommended target structure, not an
+instruction to blindly restructure an existing repository. First inspect
+the current project and reuse its architecture where practical.
+
+------------------------------------------------------------------------
+
+# 12. TECH STACK
+
+The exact stack must be determined during repository reconnaissance.
+
+The architecture should support the following categories:
+
+## Frontend
+
+``` text
+Responsive web framework
+Component-based UI
+Accessible semantic markup
+Client-side routing where appropriate
+```
+
+## Styling
+
+``` text
+CSS / framework styling system
+Design tokens
+Responsive breakpoints
+Animation system
+Reduced-motion support
+```
+
+## Content
+
+``` text
+Structured JSON / CMS / database
+```
+
+## AI
+
+``` text
+LLM provider
+Server-side AI request handling
+Structured portfolio context
+Optional retrieval layer
+```
+
+## Documents
+
+``` text
+Static PDF assets
+Secure public access
+View + download actions
+```
+
+## Development
+
+``` text
+Git
+Linting
+Formatting
+Automated tests
+Build verification
+```
+
+Do not introduce a technology merely because it is available. Prefer the
+existing configured stack unless a technical requirement justifies a
+change.
+
+------------------------------------------------------------------------
+
+# 13. DESIGN SYSTEM ARCHITECTURE
+
+Define reusable design primitives.
+
+``` text
+Design Tokens
+│
+├── Typography
+├── Spacing
+├── Radius
+├── Borders
+├── Shadows
+├── Motion
+├── Breakpoints
+└── Colors
+```
+
+Reusable components:
+
+``` text
+Button
+Card
+Badge
+Tag
+NavigationItem
+SectionHeader
+ProjectCard
+ExperienceCard
+SkillChip
+ResumeCard
+ChatMessage
+SuggestedQuestion
+Modal / Drawer
+```
+
+Avoid duplicated styling patterns.
+
+------------------------------------------------------------------------
+
+# 14. ANIMATION ARCHITECTURE
+
+Animation should be centralized and reusable.
+
+## Page transitions
+
+``` text
+Enter
+→ Fade
+→ Small vertical movement
+→ Settled state
+```
+
+## Cards
+
+``` text
+Idle
+→ Hover
+→ Small elevation
+→ Metadata emphasis
+```
+
+## Chat
+
+``` text
+Question
+→ Sending state
+→ Typing indicator
+→ Streaming response
+→ Action cards
+```
+
+## Skills
+
+``` text
+Section enters viewport
+→ Stagger skill chips
+→ Settle
+```
+
+All motion should respect:
+
+``` text
+prefers-reduced-motion
+```
+
+Animation must support UX rather than compete with the portfolio
+content.
+
+------------------------------------------------------------------------
+
+# 15. DATA FLOW
+
+## Normal portfolio navigation
+
+``` text
+User
+↓
+Route
+↓
+Page Component
+↓
+Structured Data
+↓
+UI
+```
+
+## Chatbot
+
+``` text
+User Question
+↓
+Chat UI
+↓
+API / Server Handler
+↓
+Question Processing
+↓
+Portfolio Data Retrieval
+↓
+Context Construction
+↓
+LLM
+↓
+Validation / Formatting
+↓
+Response
+↓
+Chat UI
+```
+
+## Résumé
+
+``` text
+User
+↓
+Résumé Center
+↓
+Track Selection
+↓
+PDF
+↓
+View / Download
+```
+
+------------------------------------------------------------------------
+
+# 16. AI SAFETY & GROUNDING
+
+The chatbot should be constrained to portfolio knowledge.
+
+Important rules:
+
+-   Do not invent employment history.
+-   Do not invent project results.
+-   Do not invent technologies.
+-   Do not invent certifications.
+-   Do not invent dates.
+-   Do not claim production experience for planned projects.
+-   Do not expose private configuration.
+-   Do not reveal API credentials.
+-   Do not treat self-study as professional certification.
+-   Do not claim unsupported hiring outcomes.
+
+When information is unavailable, say so.
+
+------------------------------------------------------------------------
+
+# 17. SECURITY ARCHITECTURE
+
+Trust boundaries:
+
+``` text
+Visitor Browser
+      │
+      ▼
+Public Portfolio
+      │
+      ▼
+Server/API Boundary
+      │
+      ▼
+AI Provider
+```
+
+Secrets must remain outside the public frontend.
+
+Never expose:
+
+``` text
+API keys
+Provider credentials
+Environment secrets
+Private tokens
+Internal system prompts containing secrets
+```
+
+If an AI API is required, use the project's approved server-side
+credential architecture.
+
+------------------------------------------------------------------------
+
+# 18. ACCESSIBILITY ARCHITECTURE
+
+Accessibility should be part of component design rather than a final
+patch.
+
+Required:
+
+``` text
+Semantic HTML
+Keyboard navigation
+Visible focus
+Accessible labels
+Heading hierarchy
+Screen-reader compatibility
+Color contrast
+Touch-friendly controls
+Reduced motion
+Accessible dialogs/drawers
+```
+
+The chatbot must also be keyboard accessible.
+
+------------------------------------------------------------------------
+
+# 19. PERFORMANCE ARCHITECTURE
+
+Prioritize:
+
+``` text
+Static-first rendering where practical
+↓
+Optimized assets
+↓
+Lazy loading
+↓
+Minimal client JavaScript
+↓
+Efficient animations
+↓
+Caching
+```
+
+The AI chatbot should load independently so that a slow AI request does
+not block the main portfolio.
+
+------------------------------------------------------------------------
+
+# 20. SEO ARCHITECTURE
+
+Each important page should support:
+
+``` text
+Title
+Description
+Canonical URL
+Open Graph metadata
+Semantic content
+```
+
+Recommended indexable areas:
+
+``` text
+Overview
+Experience
+Projects
+Skills
+About
+```
+
+------------------------------------------------------------------------
+
+# 21. MUNDER DIFFLIN IMPLEMENTATION FLOW
+
+Architecture work itself follows the Munder Difflin procedure.
+
+``` text
+PRD
+↓
+AUDIT CURRENT REPOSITORY
+↓
+ARCHITECTURE
+↓
+FOLDER / FILE STRUCTURE
+↓
+TECH STACK
+↓
+TASK DECOMPOSITION
+↓
+SPECIALIST SELECTION
+↓
+IMPLEMENTATION
+↓
+TESTING
+↓
+SECURITY REVIEW
+↓
+CODE REVIEW
+↓
+REALITY CHECK
+↓
+EVIDENCE
+↓
+CHECKPOINT
+```
+
+------------------------------------------------------------------------
+
+# 22. AGENT RESPONSIBILITIES
+
+## Software Architect
+
+Own:
+
+-   System architecture.
+-   Component boundaries.
+-   Data flow.
+-   Technology decisions.
+
+## UI Designer
+
+Own:
+
+-   Visual hierarchy.
+-   Design system.
+-   Motion principles.
+-   Responsive visual behavior.
+
+## UX Architect
+
+Own:
+
+-   Navigation.
+-   User journeys.
+-   Information architecture.
+-   Chatbot interaction model.
+
+## Frontend Developer
+
+Own:
+
+-   Components.
+-   Pages.
+-   Routing.
+-   Responsive behavior.
+-   Frontend integration.
+
+## AI Engineer
+
+Own:
+
+-   Chatbot.
+-   Prompt architecture.
+-   AI integration.
+-   Grounding strategy.
+
+## ML / RAG Specialist
+
+Use when retrieval or embeddings become necessary.
+
+Own:
+
+-   Retrieval architecture.
+-   Chunking.
+-   Embeddings.
+-   Evaluation.
+
+## Security Architect / AppSec
+
+Own:
+
+-   AI API security.
+-   Trust boundaries.
+-   Input/output risks.
+-   Secrets handling.
+
+## Test Automation Engineer
+
+Own:
+
+-   Automated verification.
+-   Regression tests.
+-   End-to-end journeys.
+
+## Accessibility Auditor
+
+Own:
+
+-   Keyboard.
+-   Screen reader.
+-   Focus.
+-   Contrast.
+-   Reduced motion.
+
+## Performance Engineer
+
+Use when measurements indicate performance problems.
+
+## Code Reviewer
+
+Independently challenge implementation quality.
+
+## Reality Checker
+
+Determine whether the claimed implementation actually works.
+
+------------------------------------------------------------------------
+
+# 23. ARCHITECTURAL PRINCIPLES
+
+Follow:
+
+``` text
+READ BEFORE WRITE
+AUDIT BEFORE MODIFY
+UNDERSTAND BEFORE IMPLEMENT
+REUSE BEFORE REPLACE
+MINIMAL CHANGE
+STRUCTURED DATA OVER DUPLICATION
+EVIDENCE OVER CLAIMS
+SECURITY BEFORE CONVENIENCE
+ACCESSIBILITY BY DESIGN
+PERFORMANCE BY MEASUREMENT
+```
+
+------------------------------------------------------------------------
+
+# 24. DEFINITION OF DONE
+
+Architecture is ready for implementation when:
+
+``` text
+✓ Major components are identified
+✓ Data relationships are defined
+✓ Portfolio tracks are defined
+✓ Résumé access is defined
+✓ Chatbot data flow is defined
+✓ Security boundaries are defined
+✓ Folder/file organization is defined
+✓ Responsive strategy is defined
+✓ Animation strategy is defined
+✓ Accessibility requirements are defined
+✓ Testing strategy is defined
+✓ Existing repository constraints have been inspected
+```
+
+------------------------------------------------------------------------
+
+# 25. ARCHITECTURE REALITY CHECK
+
+Before treating the architecture as implemented:
+
+``` text
+Does the proposed structure match the actual repository?
+Does the selected stack actually support the design?
+Are résumé PDFs actually available?
+Are portfolio facts grounded in source material?
+Can the chatbot access structured portfolio data?
+Are secrets protected?
+Can the site operate without the AI service?
+Does the responsive architecture work?
+Can the system be tested?
+Can the system be maintained?
+```
+
+Architecture should describe what will actually be built, not what
+merely sounds technically impressive.
+
+------------------------------------------------------------------------
+
+# 26. NEXT ENGINEERING STEP
+
+After this document:
+
+``` text
+architecture.md
+      ↓
+Repository Reconnaissance
+      ↓
+Actual Stack Confirmation
+      ↓
+Task Graph
+      ↓
+Implementation
+      ↓
+Testing
+      ↓
+Security
+      ↓
+Review
+      ↓
+Reality Check
+```
+
+The next agent must inspect the real repository before modifying it.
+
+No framework, folder structure, dependency, or AI architecture should be
+assumed to exist until verified.
