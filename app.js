@@ -27,11 +27,12 @@ const DATA={
 };
 const suggestions=['What cybersecurity experience do you have?','What did you do at TechCiti?','What AI/ML projects have you built?','What did you do at InAmigos?','What are your strongest technical skills?','Show me the cybersecurity résumé.'];
 const $=s=>document.querySelector(s);
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 function render(){
- $('#suggestions').innerHTML=suggestions.map(q=>`<button class="suggestion" type="button">${q}</button>`).join('');
- $('#projectGrid').innerHTML=DATA.projects.map(p=>`<article class="project-card" data-track="${p.track}"><div class="meta"><span>${p.track==='security'?'Cybersecurity':p.track==='ai'?'AI / ML':p.track==='intersection'?'AI × Security':'Portfolio'}</span><span class="status">${p.status}</span></div><h3>${p.title}</h3><p>${p.description}</p><div class="evidence">${p.tech}</div></article>`).join('');
- $('#skillGrid').innerHTML=DATA.skills.map(s=>`<article class="skill-card"><div class="meta"><span>${s.area}</span></div><h3>${s.title}</h3><p>${s.evidence}</p></article>`).join('');
- $('#certGrid').innerHTML=DATA.certs.map(c=>`<article class="cert-card"><div class="meta"><span>${c.type}</span></div><h3>${c.title}</h3><p>${c.note}</p></article>`).join('');
+ $('#suggestions').replaceChildren(...suggestions.map(q=>{const b=document.createElement('button');b.className='suggestion';b.type='button';b.textContent=q;return b;}));
+ $('#projectGrid').innerHTML=DATA.projects.map((p,i)=>`<article class="project-card" data-track="${escapeHtml(p.track)}"><div class="meta"><span>${escapeHtml(p.track==='security'?'Cybersecurity':p.track==='ai'?'AI / ML':p.track==='intersection'?'AI × Security':'Portfolio')}</span><span class="status">${escapeHtml(p.status)}</span></div><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.description)}</p><details><summary>Evidence & status</summary><div class="evidence">${escapeHtml(p.tech)}</div></details></article>`).join('');
+ $('#skillGrid').innerHTML=DATA.skills.map(s=>`<article class="skill-card"><div class="meta"><span>${escapeHtml(s.area)}</span></div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.evidence)}</p></article>`).join('');
+ $('#certGrid').innerHTML=DATA.certs.map(c=>`<article class="cert-card"><div class="meta"><span>${escapeHtml(c.type)}</span></div><h3>${escapeHtml(c.title)}</h3><p>${escapeHtml(c.note)}</p></article>`).join('');
 }
 function answer(raw){const q=raw.toLowerCase();
  if(/resume|résumé|cv/.test(q)) return `I can identify two required résumé tracks: a Cybersecurity résumé tied to TechCiti and an AI/ML résumé tied to InAmigos. The actual PDF assets are not present in the current repository, so I won't invent download links.`;
@@ -43,10 +44,19 @@ function answer(raw){const q=raw.toLowerCase();
  if(/education|degree|college|university/.test(q)) return `I don't have verified education information in the current repository source. I won't invent a degree, institution, or dates.`;
  return `I don't have verified information about that yet. You can explore the Experience or Work sections for the available details.`;
 }
-function addMessage(text,kind='assistant'){const el=document.createElement('div');el.className=`message ${kind}`;el.innerHTML=`<span class="message-label">${kind==='user'?'You':'Portfolio AI'}</span><p></p>`;el.querySelector('p').textContent=text;$('#chatLog').appendChild(el);$('#chatLog').scrollTop=$('#chatLog').scrollHeight;}
+function addMessage(text,kind='assistant'){const el=document.createElement('div');el.className=`message ${kind}`;const label=document.createElement('span');label.className='message-label';label.textContent=kind==='user'?'You':'Portfolio AI';const p=document.createElement('p');p.textContent=text;el.append(label,p);$('#chatLog').appendChild(el);$('#chatLog').scrollTop=$('#chatLog').scrollHeight;}
 function ask(q){if(!q.trim())return;addMessage(q,'user');setTimeout(()=>addMessage(answer(q)),180)}
-document.addEventListener('click',e=>{if(e.target.matches('.suggestion')){const q=e.target.textContent;$('#heroInput').value=q;ask(q);location.hash='ask'}if(e.target.matches('.filter')){document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');const f=e.target.dataset.filter;document.querySelectorAll('.project-card').forEach(c=>c.hidden=!(f==='all'||c.dataset.track===f||(f==='ai'&&c.dataset.track==='intersection')))}});
+const menu=$('.sidebar'),menuToggle=$('#menuToggle'),menuClose=$('#menuClose');
+function closeMenu(){menu.classList.remove('open');menuToggle.setAttribute('aria-expanded','false');}
+document.addEventListener('click',e=>{
+ if(e.target.matches('.suggestion')){const q=e.target.textContent;$('#heroInput').value=q;ask(q);location.hash='ask';return;}
+ if(e.target.matches('.filter')){document.querySelectorAll('.filter').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false')});e.target.classList.add('active');e.target.setAttribute('aria-pressed','true');const f=e.target.dataset.filter;document.querySelectorAll('.project-card').forEach(c=>c.hidden=!(f==='all'||c.dataset.track===f||(f==='ai'&&c.dataset.track==='intersection')))}
+});
 $('#heroAsk').addEventListener('submit',e=>{e.preventDefault();const q=$('#heroInput').value;ask(q);location.hash='ask'});
 $('#chatForm').addEventListener('submit',e=>{e.preventDefault();const q=$('#chatInput').value;$('#chatInput').value='';ask(q)});
-const menu=$('.sidebar');$('#menuToggle').addEventListener('click',()=>{menu.classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',menu.classList.contains('open'))});$('#menuClose').addEventListener('click',()=>menu.classList.remove('open'));document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>menu.classList.remove('open')));
+menuToggle.addEventListener('click',()=>{const open=!menu.classList.contains('open');menu.classList.toggle('open',open);menuToggle.setAttribute('aria-expanded',String(open));if(open)menuClose.focus();});
+menuClose.addEventListener('click',closeMenu);
+document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',closeMenu));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){closeMenu();menuToggle.focus();}});
+document.querySelectorAll('.filter').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false'));
 render();
