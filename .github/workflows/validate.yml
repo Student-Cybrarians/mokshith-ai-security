@@ -21,9 +21,17 @@ jobs:
           test -f app.js
           test -f 404.html
           test -f CNAME
-          grep -q 'mokshith-ai-security.is-a.dev' CNAME
+          test -f robots.txt
+          test -f sitemap.xml
+          grep -Fxq 'mokshith-ai-security.is-a.dev' CNAME
+          grep -Fq 'https://mokshith-ai-security.is-a.dev/' index.html
+          grep -Fq 'https://mokshith-ai-security.is-a.dev/sitemap.xml' robots.txt
+          grep -Fq '<loc>https://mokshith-ai-security.is-a.dev/</loc>' sitemap.xml
       - name: Validate grounded-content boundaries
         run: |
           grep -q 'TechCiti Technologies Private Limited' index.html
           grep -q 'InAmigos Foundation (IAF)' index.html
           grep -q 'I don.t have verified information' app.js || true
+      - name: Check for obvious credential material
+        run: |
+          ! grep -RniE '(sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY)' --exclude-dir=.git .
