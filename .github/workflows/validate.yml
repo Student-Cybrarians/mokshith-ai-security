@@ -28,6 +28,8 @@ jobs:
           grep -Fq 'https://mokshith-ai-security.is-a.dev/' index.html
           grep -Fq 'https://mokshith-ai-security.is-a.dev/sitemap.xml' robots.txt
           grep -Fq '<loc>https://mokshith-ai-security.is-a.dev/</loc>' sitemap.xml
+      - name: Run portfolio smoke checks
+        run: node tests/portfolio-smoke.mjs
       - name: Validate grounded-content boundaries
         run: |
           grep -q 'TechCiti Technologies Private Limited' index.html
