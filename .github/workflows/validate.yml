@@ -39,13 +39,16 @@ jobs:
           grep -q 'needs-source' PORTFOLIO-CONTENT-CONTRACT.md
           grep -q 'blocked' PORTFOLIO-CONTENT-CONTRACT.md
           grep -q 'I don.t have verified information' app.js || true
-      - name: Validate no claimed PDF exists without an asset
+      - name: Validate résumé assets and links
         run: |
-          if find . -type f -iname '*.pdf' -not -path './.git/*' | grep -q .; then
-            echo 'PDF assets found; résumé references require manual content verification.'
-          else
-            grep -q 'PDF asset required' index.html
-          fi
+          test -f resumes/MOKSHITH_Cybrarian-Resume.pdf
+          test -f resumes/MOKSHITH_AIML-Resume.pdf
+          test "$(head -c 5 resumes/MOKSHITH_Cybrarian-Resume.pdf)" = '%PDF-'
+          test "$(head -c 5 resumes/MOKSHITH_AIML-Resume.pdf)" = '%PDF-'
+          grep -Fq 'resumes/MOKSHITH_Cybrarian-Resume.pdf' index.html
+          grep -Fq 'resumes/MOKSHITH_AIML-Resume.pdf' index.html
+          ! grep -q 'PDF asset required' index.html
+          grep -q 'Résumé PDFs verified in the repository' index.html
       - name: Check for obvious credential material
         run: |
           ! grep -RniE '(sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY)' --exclude-dir=.git .
