@@ -3,41 +3,44 @@
 ## Current checkpoint
 
 PROJECT: Prompt Folio
-CURRENT PHASE: Phase 3 — Core Portfolio Experience
-STATUS: COMPLETED / VERIFIED
+CURRENT PHASE: Phase 5 — Conversational Chatbot, with source-independent Phase 4 interactive work complete
+STATUS: PARTIAL / BLOCKED BY REQUIRED SOURCE MATERIAL AND LIVE VERIFICATION
 
-### What was inspected
-- Authoritative `architecture.md`, `design.md`, `rules.md`, `phases.doc.md`, `prompt-folio-munder-difflin-build-prompt.md`, and `PORTFOLIO-CONTENT-CONTRACT.md`.
-- Current static-first implementation on `master-branch`: `index.html`, `styles.css`, `app.js`, `404.html`, `CNAME`, deployment workflow, SEO files, and validation workflow.
-- Existing evidence boundaries and source gaps; no new unsupported candidate facts were introduced.
+### Source-of-truth audit
+- Re-read the six authoritative project files from `master-branch`: `memory.md`, `architecture.md`, `design.md`, `rules.md`, `phases.doc.md`, and `prompt-folio-munder-difflin-build-prompt.md` before implementation.
+- Current architecture remains a minimal static-first HTML/CSS/JavaScript application; no unnecessary framework or dependency was introduced.
+- Evidence hierarchy is preserved: implementation and tests outrank documentation, while missing résumé/contact/education/project source facts remain explicitly unverified.
 
-### Phase 3 work completed
-- Strengthened the single-page information architecture around Overview, Experience, Work, Skills, Education, Certifications, Résumés, About, Ask Me, and Contact.
-- Added explicit Overview track pathways for Cybersecurity, AI / ML, and AI × Security work.
-- Added concise section introductions to explain evidence boundaries and content maturity.
-- Added direct cross-navigation from each verified internship track into its related skills.
-- Preserved project maturity labels and source-gated project details rather than inventing technologies, dates, outcomes, or links.
-- Preserved education, résumé, and contact blockers as visible states instead of manufacturing records or URLs.
-- Improved small-screen track-link behavior and section anchor positioning while preserving reduced-motion/accessibility behavior.
+### Phase 4/5 work completed in this checkpoint
+- Merged PR #7: `feat: strengthen grounded portfolio interactions`.
+- Added `tests/portfolio-smoke.mjs` and wired it into GitHub Actions.
+- Added verified `Network Analysis` and `Problem Solving` focus areas to structured skills.
+- Replaced unsupported hero title wording with the evidence-safe positioning `Cybersecurity · AI/ML · Prompt Engineering`.
+- Added 600-character chatbot input bounds, a typing/checking state, clear-conversation control, contextual navigation actions, and safe text rendering.
+- Added chatbot navigation actions only to internal verified sections; no fabricated external résumé/contact URLs were introduced.
+- Preserved separate résumé track cards with disabled access until real PDF assets exist.
 
 ### Verification evidence
-- Phase 3 PR #6: `https://github.com/Student-Cybrarians/mokshith-ai-security/pull/6`
-- GitHub Actions validation run: `34305417354`, all static-validation steps completed successfully.
-- Squash merge commit on `master-branch`: `6a1e7e081def05e3cfdebf2ef7ebff855a15a732`.
-- Review gate: connected account cannot approve its own PR; merge was performed only after successful CI and diff inspection.
+- PR #7: `https://github.com/Student-Cybrarians/mokshith-ai-security/pull/7`
+- PR #7 review comment recorded by Michael after diff inspection.
+- GitHub Actions validation run: `34305988774`; all validation steps completed successfully, including JavaScript syntax, required-file checks, portfolio smoke checks, grounding checks, PDF-link integrity, and credential-pattern checks.
+- Squash merge commit: `fb25c1fbe662715ddcc1fe25b32f97d943f9eb44`.
+- `master-branch` remains the deployment branch.
+- Existing `CNAME` remains `mokshith-ai-security.is-a.dev`.
 
 ### Remaining blockers
-1. Two résumé PDFs are absent from the repository.
+1. Two real résumé PDFs are absent from the repository; independent View/Download actions cannot truthfully be enabled.
 2. Verified public email/GitHub/LinkedIn URLs are absent.
 3. Verified education records are absent.
-4. Detailed project technology stacks, links, results, and dates require source material.
-5. Browser/runtime and production-domain verification remain outstanding.
+4. Detailed project technologies, roles, links, results, and dates require source material.
+5. Browser-level interaction verification and production-domain verification remain outstanding.
 
 ## Agent handoff
-TASK: Continue automatically into the next delivery phase while preserving evidence boundaries.
-WHAT WAS INSPECTED: authoritative project constitution, Phase 2 content contract, and current implementation.
-WHAT WAS CHANGED: Phase 3 core IA presentation, track pathways, section guidance, cross-navigation, responsive refinements, and phase checkpoint.
-WHAT WAS_TESTED: GitHub Actions static validation passed on the Phase 3 head commit; PR diff was inspected before merge.
-RESULT: COMPLETED / VERIFIED.
-EVIDENCE: PR #6 and merge commit `6a1e7e081def05e3cfdebf2ef7ebff855a15a732`.
-NEXT HIGHEST-PRIORITY TASK: proceed to Phase 4 — Résumés, Projects & Interactive Features, prioritizing real résumé PDF assets when they become available and otherwise continuing source-gated interactive improvements without inventing missing material.
+TASK: Continue automatically through Phase 6–9 using only source-independent work until external evidence is supplied, then finish résumé/contact/content verification and production reality checks.
+WHAT WAS INSPECTED: six authoritative project files, current master implementation, validation workflow, and PR #7 diff.
+WHAT WAS CHANGED: grounded chatbot interactions, bounded input, navigation actions, structured skill additions, evidence-safe hero positioning, and CI smoke tests.
+WHAT WAS_TESTED: GitHub Actions run `34305988774` passed all configured checks.
+RESULT: PARTIAL / BLOCKED.
+EVIDENCE: PR #7, merge commit `fb25c1fbe662715ddcc1fe25b32f97d943f9eb44`, CI run `34305988774`.
+BLOCKERS: résumé PDFs, public contact URLs, education records, detailed project source evidence, and live browser/production verification.
+NEXT HIGHEST-PRIORITY TASK: complete Phase 6 accessibility/premium-UX hardening and Phase 7–8 automated/static quality gates, then verify deployment; do not enable or invent blocked assets.
