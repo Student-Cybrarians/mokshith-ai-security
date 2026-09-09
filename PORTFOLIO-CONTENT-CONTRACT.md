@@ -9,13 +9,13 @@ This document is the Phase 2 contract between portfolio source data, UI presenta
 | Entity | Required fields | Publication rule |
 |---|---|---|
 | Candidate | `id`, `displayName`, `summary` | Publish only verified source facts. |
-| Experience | `id`, `organization`, `role`, `track`, `focusAreas`, `evidenceStatus` | Role and organization must be verified. Dates/details remain unpublished until sourced. |
+| Experience | `id`, `organization`, `role`, `track`, `focusAreas`, `evidenceStatus` | Role, dates, and documented responsibilities may be published when supported by supplied résumé/source material. |
 | Project | `id`, `title`, `track`, `status`, `description`, `evidenceStatus` | Status may be published when specified; technologies, results, links, and dates require evidence. |
 | Skill | `id`, `title`, `area`, `evidenceStatus`, `evidence` | Skill claims must identify their supporting source or remain qualified. |
-| Education | `id`, `institution`, `program`, `dates`, `evidenceStatus` | No education record is published until source material is verified. |
+| Education | `id`, `institution`, `program`, `dates`, `evidenceStatus` | Publish only when supported by supplied résumé/source material. |
 | Certification | `id`, `title`, `type`, `evidenceStatus`, `note` | Distinguish certification, self-study, virtual experience, and simulation. |
 | Résumé | `id`, `track`, `pdfPath`, `displayName`, `evidenceStatus` | A View/Download action is enabled only when the referenced PDF exists. |
-| Link | `id`, `type`, `label`, `url`, `evidenceStatus` | Public URLs must be verified before publication. |
+| Link | `id`, `type`, `label`, `url`, `evidenceStatus` | Public URLs may be published when explicitly present in supplied résumé/source material. |
 
 ## Evidence states
 
@@ -55,11 +55,11 @@ The résumé center has two independent routes:
 1. Cybersecurity résumé → `View` + `Download PDF`
 2. AI / ML résumé → `View` + `Download PDF`
 
-Until the corresponding PDF asset exists in the repository, the action remains visibly unavailable rather than pointing to a guessed path.
+Both supplied PDF assets are now present in the repository and are referenced by their exact verified paths.
 
 ## Chatbot knowledge boundary
 
-Portfolio AI may answer from the same canonical content model used by the UI. It may summarize verified or qualified records, explain evidence boundaries, and navigate visitors to relevant sections. It must refuse to manufacture missing education, employment dates, technologies, project results, credentials, contact details, or private configuration.
+Portfolio AI uses the same evidence boundary as the UI, with a structured knowledge model covering profile, experience, projects, skills, education, certifications, résumés, and public references. It may synthesize multiple verified records for recruiter-facing questions, but it must not manufacture missing technologies, project results, credentials, contact details, or private configuration.
 
 Unknown-answer baseline:
 
@@ -84,10 +84,9 @@ Navigation is section-oriented in the current static-first implementation; it ma
 
 ## Current source gaps
 
-- Two résumé PDF assets are required.
-- Verified public email/GitHub/LinkedIn URLs are required.
-- Verified education records are required.
-- Detailed project technologies, repositories/demos, dates, results, and case-study evidence are required before stronger project claims are published.
+- Detailed project technologies, repositories/demos, dates, results, and case-study evidence remain incomplete and must not be guessed.
+- Direct contact publication in the main Contact UI remains intentionally conservative even though résumé material contains public profile references.
+- Some certification entries are listed without earning dates; dates are not inferred.
 
 ## Phase 2 acceptance criteria
 
@@ -95,7 +94,7 @@ Navigation is section-oriented in the current static-first implementation; it ma
 - Core content entities and relationships are defined.
 - Evidence states prevent unsupported claims from becoming published facts.
 - Two professional tracks and the AI × Security intersection are explicit.
-- Résumé routing has a defined asset gate.
+- Résumé routing has a defined asset gate and both supplied PDFs are available.
 - Chatbot knowledge boundaries match portfolio evidence boundaries.
 - Navigation relationships are documented.
 - Missing source material is recorded as a blocker rather than guessed.
