@@ -13,12 +13,15 @@ jobs:
         with:
           node-version: 22
       - name: Validate JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check app.js
+          node --check chatbot-knowledge.js
       - name: Validate required site files
         run: |
           test -f index.html
           test -f styles.css
           test -f app.js
+          test -f chatbot-knowledge.js
           test -f 404.html
           test -f CNAME
           test -f robots.txt
@@ -30,6 +33,8 @@ jobs:
           grep -Fq '<loc>https://mokshith-ai-security.is-a.dev/</loc>' sitemap.xml
       - name: Run portfolio smoke checks
         run: node tests/portfolio-smoke.mjs
+      - name: Run recruiter-facing chatbot tests
+        run: node tests/chatbot.mjs
       - name: Validate grounded-content boundaries
         run: |
           grep -q 'TechCiti Technologies Private Limited' index.html
@@ -38,7 +43,7 @@ jobs:
           grep -q 'AI / ML + Prompt Engineering' PORTFOLIO-CONTENT-CONTRACT.md
           grep -q 'needs-source' PORTFOLIO-CONTENT-CONTRACT.md
           grep -q 'blocked' PORTFOLIO-CONTENT-CONTRACT.md
-          grep -q 'I don.t have verified information' app.js || true
+          grep -q 'I don.t have verified information' chatbot-knowledge.js
       - name: Validate résumé assets and links
         run: |
           test -f resumes/MOKSHITH_Cybrarian-Resume.pdf
