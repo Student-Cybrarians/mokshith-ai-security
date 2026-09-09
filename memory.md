@@ -3,7 +3,7 @@
 ## Current checkpoint
 
 PROJECT: Prompt Folio
-CURRENT PHASE: Phase 5 — Conversational Chatbot, with source-independent Phase 4 interactive work complete
+CURRENT PHASE: Phase 8 — Testing / Reality Check, with source-independent implementation work through Phase 8 complete
 STATUS: PARTIAL / BLOCKED BY REQUIRED SOURCE MATERIAL AND LIVE VERIFICATION
 
 ### Source-of-truth audit
@@ -11,36 +11,39 @@ STATUS: PARTIAL / BLOCKED BY REQUIRED SOURCE MATERIAL AND LIVE VERIFICATION
 - Current architecture remains a minimal static-first HTML/CSS/JavaScript application; no unnecessary framework or dependency was introduced.
 - Evidence hierarchy is preserved: implementation and tests outrank documentation, while missing résumé/contact/education/project source facts remain explicitly unverified.
 
-### Phase 4/5 work completed in this checkpoint
+### Phase 4/5 work completed
 - Merged PR #7: `feat: strengthen grounded portfolio interactions`.
-- Added `tests/portfolio-smoke.mjs` and wired it into GitHub Actions.
-- Added verified `Network Analysis` and `Problem Solving` focus areas to structured skills.
-- Replaced unsupported hero title wording with the evidence-safe positioning `Cybersecurity · AI/ML · Prompt Engineering`.
-- Added 600-character chatbot input bounds, a typing/checking state, clear-conversation control, contextual navigation actions, and safe text rendering.
-- Added chatbot navigation actions only to internal verified sections; no fabricated external résumé/contact URLs were introduced.
-- Preserved separate résumé track cards with disabled access until real PDF assets exist.
+- Added CI smoke checks for core sections, verified internship identity, CNAME, and résumé PDF-link integrity.
+- Added verified Network Analysis and Problem Solving focus areas.
+- Replaced unsupported hero title wording with evidence-safe `Cybersecurity · AI/ML · Prompt Engineering`.
+- Added 600-character chatbot bounds, typing/checking state, clear-conversation control, contextual internal navigation actions, and safe text rendering.
+- Preserved separate résumé track cards with disabled access until real PDFs exist.
 
-### Verification evidence
-- PR #7: `https://github.com/Student-Cybrarians/mokshith-ai-security/pull/7`
-- PR #7 review comment recorded by Michael after diff inspection.
-- GitHub Actions validation run: `34305988774`; all validation steps completed successfully, including JavaScript syntax, required-file checks, portfolio smoke checks, grounding checks, PDF-link integrity, and credential-pattern checks.
-- Squash merge commit: `fb25c1fbe662715ddcc1fe25b32f97d943f9eb44`.
-- `master-branch` remains the deployment branch.
-- Existing `CNAME` remains `mokshith-ai-security.is-a.dev`.
+### Phase 6–8 quality gates completed
+- Merged PR #8: `test: expand accessibility and quality gates`.
+- Smoke suite now checks semantic language/landmarks, skip navigation, chat live region, form labels, bounded inputs, canonical/OG metadata, focus-visible support, reduced-motion support, responsive breakpoints, safe rendering patterns, credential-pattern absence, and résumé-link integrity.
+- No new runtime dependency was introduced.
+
+### Deployment evidence
+- `CNAME` remains `mokshith-ai-security.is-a.dev`.
+- GitHub Pages deployment workflow is active on `master-branch`.
+- Previous deployment run `34306046129` completed successfully through the Deploy to GitHub Pages step.
+- Current deployment run `34306110213` for merge commit `d6db08e271ece6fffec273a18faa4abe098f80fe` was observed progressing through checkout, Pages configuration, artifact upload, and deployment; live custom-domain HTTP verification remains unavailable from the current tool environment.
+- Current validation run `34306110245` is associated with merge commit `d6db08e271ece6fffec273a18faa4abe098f80fe` and is the release validation evidence for the merged quality gates.
 
 ### Remaining blockers
 1. Two real résumé PDFs are absent from the repository; independent View/Download actions cannot truthfully be enabled.
 2. Verified public email/GitHub/LinkedIn URLs are absent.
 3. Verified education records are absent.
 4. Detailed project technologies, roles, links, results, and dates require source material.
-5. Browser-level interaction verification and production-domain verification remain outstanding.
+5. Browser-level interaction verification and live custom-domain verification remain outstanding.
 
 ## Agent handoff
-TASK: Continue automatically through Phase 6–9 using only source-independent work until external evidence is supplied, then finish résumé/contact/content verification and production reality checks.
-WHAT WAS INSPECTED: six authoritative project files, current master implementation, validation workflow, and PR #7 diff.
-WHAT WAS CHANGED: grounded chatbot interactions, bounded input, navigation actions, structured skill additions, evidence-safe hero positioning, and CI smoke tests.
-WHAT WAS_TESTED: GitHub Actions run `34305988774` passed all configured checks.
+TASK: Finish Phase 9 deployment reality check and then close the remaining source-evidence blockers when the required materials are supplied.
+WHAT WAS_INSPECTED: six authoritative project files, current master implementation, PR #7 and PR #8 diffs, CI workflows, deployment workflow, and deployment run evidence.
+WHAT WAS_CHANGED: grounded chatbot interactions, bounded input, internal navigation actions, structured skill additions, evidence-safe hero positioning, and expanded automated accessibility/security/responsive smoke gates.
+WHAT WAS_TESTED: PR #7 validation passed; PR #8 validation run `34306078483` passed all configured checks; merged master validation run `34306110245` is the current release check.
 RESULT: PARTIAL / BLOCKED.
-EVIDENCE: PR #7, merge commit `fb25c1fbe662715ddcc1fe25b32f97d943f9eb44`, CI run `34305988774`.
-BLOCKERS: résumé PDFs, public contact URLs, education records, detailed project source evidence, and live browser/production verification.
-NEXT HIGHEST-PRIORITY TASK: complete Phase 6 accessibility/premium-UX hardening and Phase 7–8 automated/static quality gates, then verify deployment; do not enable or invent blocked assets.
+EVIDENCE: PR #7, PR #8, merge commit `d6db08e271ece6fffec273a18faa4abe098f80fe`, deployment run `34306110213`, previous successful deployment `34306046129`.
+BLOCKERS: résumé PDFs, public contact URLs, education records, detailed project source evidence, and live browser/custom-domain verification.
+NEXT HIGHEST-PRIORITY TASK: verify the current deployment once reachable; then integrate only user-supplied/verified source assets and re-run the full Definition-of-Done reality check. Do not close Issue #1 until every applicable requirement is evidenced.
