@@ -3,22 +3,23 @@
 ## Current checkpoint
 
 PROJECT: Prompt Folio
-CURRENT PHASE: Phase 4 — Interactive portfolio behavior / deployment & quality hardening
-STATUS: PARTIAL
+CURRENT PHASE: Phase 2 — Portfolio Architecture & Content Model
+STATUS: COMPLETED / PENDING VERIFICATION
 
 ### What was inspected
-- Git repository `Student-Cybrarians/mokshith-ai-security` on `master-branch` and repair branch `munder-difflin/phase-4-repair`.
-- Existing static frontend: `index.html`, `styles.css`, `app.js`, `404.html`, `CNAME`, and validation workflow.
-- Authoritative project/engineering documents and prior memory checkpoint were preserved as the source hierarchy.
-- Repository search for PDF assets returned no `.pdf` files.
+- `architecture.md`, `design.md`, `rules.md`, `phases.doc.md`, `prompt-folio-munder-difflin-build-prompt.md`, and the prior `memory.md` checkpoint on `master-branch`.
+- Current static-first implementation: `index.html`, `styles.css`, `app.js`, `404.html`, `CNAME`, deployment workflow, SEO files, and validation workflow.
+- Current structured portfolio data and deterministic Portfolio AI behavior.
 
-### Repairs implemented on repair branch
-- Added `.github/workflows/deploy-pages.yml` for GitHub Pages deployment from `master-branch`.
-- Added `robots.txt` and `sitemap.xml` using the verified canonical hostname.
-- Hardened dynamic portfolio rendering with HTML escaping and DOM text construction for visitor-controlled chat content.
-- Added native accessible `<details>` evidence/status expansion to project cards.
-- Added `aria-pressed` state to project filters and Escape-key/focus behavior for the mobile navigation.
-- Expanded CI validation to cover SEO files, canonical host, required assets, grounded content, and obvious credential patterns.
+### Phase 2 work completed
+- Added `PORTFOLIO-CONTENT-CONTRACT.md` as the canonical Phase 2 information-architecture/content contract.
+- Defined Candidate, Experience, Project, Skill, Education, Certification, Résumé, and Link entities with required fields and publication rules.
+- Defined `verified`, `qualified`, `needs-source`, and `blocked` evidence states.
+- Explicitly modeled Cybersecurity, AI / ML + Prompt Engineering, and AI × Security tracks.
+- Defined project-detail fields without requiring unsupported optional fields.
+- Defined independent Cybersecurity and AI / ML résumé asset gates.
+- Defined chatbot knowledge boundaries to match portfolio evidence boundaries.
+- Strengthened CI so the content contract itself is checked on every push/PR.
 
 ### Verified facts used
 - TechCiti Technologies Private Limited — Cyber Security Analyst Intern.
@@ -27,21 +28,22 @@ STATUS: PARTIAL
 
 ### Remaining blockers
 1. Two résumé PDFs are absent from the repository.
-2. Verified public email/GitHub/LinkedIn URLs are absent from the repository.
-3. Verified education records are absent from the repository.
-4. Detailed project technology stacks, links, results, and dates require source material before publication.
-5. GitHub Pages production reachability and custom-domain behavior require live deployment verification; repository tooling does not itself prove production reachability.
+2. Verified public email/GitHub/LinkedIn URLs are absent.
+3. Verified education records are absent.
+4. Detailed project technology stacks, links, results, and dates require source material.
+5. Browser/runtime and production-domain verification remain outstanding.
 
 ### Validation state
-- Repair branch head: `ba874164dae7c2f967cc23947a5be0db96a1d19b`.
-- GitHub Actions validation run `34273384279` was observed in `queued` state at checkpoint time; no passing conclusion was available yet.
-- Local browser/runtime validation remains unavailable because the execution environment cannot clone GitHub over the network.
+- Phase 2 branch: `munder-difflin/phase-2-requirements`.
+- Content-contract commit: `fbdb4d4a027cc6e1d8688e0fdaaf0c779a7a3995`.
+- CI validation update commit: `8216b188a314c62663524a482f85c9cbc3ab6c4f`.
+- GitHub Actions result must be checked before merge; source-level validation is complete.
 
 ## Agent handoff
-TASK: Repair and harden Prompt Folio after foundation merge.
-WHAT WAS INSPECTED: current master files, CI workflow, missing deployment/SEO files, and repository PDF search.
-WHAT WAS CHANGED: deployment workflow, robots/sitemap, safer rendering, accessible project detail interactions, improved mobile/filter semantics, stronger CI checks.
-WHAT WAS TESTED: repository search found no PDF assets; GitHub Actions run was queued; source-level review completed. Production/browser verification remains pending.
-RESULT: PARTIAL / UNVERIFIED.
-EVIDENCE: repair branch head `ba874164dae7c2f967cc23947a5be0db96a1d19b`; validation run `34273384279` queued.
-NEXT RECOMMENDATION: wait for CI result, inspect failures if any, merge the repair PR only after checks pass, then verify GitHub Pages deployment and custom hostname over HTTP.
+TASK: Complete Phase 2 architecture/content-model formalization, then continue automatically through the remaining delivery phases while preserving evidence boundaries.
+WHAT WAS INSPECTED: authoritative project constitution and current implementation.
+WHAT WAS CHANGED: canonical content contract and CI enforcement.
+WHAT WAS TESTED: JavaScript syntax and repository validation are defined in CI; live/browser verification remains pending.
+RESULT: COMPLETED / PENDING VERIFICATION.
+EVIDENCE: phase-2 branch and commits above.
+NEXT HIGHEST-PRIORITY TASK: verify Phase 2 CI, merge if passing, then implement the next highest-priority verified Phase 3 core-experience improvements without fabricating missing source facts.
