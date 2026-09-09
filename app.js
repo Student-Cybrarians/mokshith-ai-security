@@ -1,67 +1,119 @@
-const DATA={
- projects:[
-  {title:'Human-Detection',track:'ai',status:'Concept / Planning',description:'AI/ML project named in the project specification; detailed implementation evidence is not yet present in the repository.',tech:'Status only; technology verification required.'},
-  {title:'IntelliHire-v3',track:'ai',status:'Early Prototype',description:'AI/ML project identified by the architecture specification. Detailed outcomes remain unverified.',tech:'Technology verification required.'},
-  {title:'AI-IDS-ES',track:'intersection',status:'Design Stage',description:'An AI × cybersecurity project explicitly identified as the intersection of the two tracks.',tech:'Detailed technology stack requires source verification.'},
-  {title:'Personal Portfolio Website',track:'all',status:'Earlier Web Project',description:'A prior portfolio/web-development project named by the architecture specification.',tech:'Detailed implementation evidence requires source verification.'}
- ],
- skills:[
-  {title:'SOC Operations',area:'Cybersecurity',evidence:'TechCiti internship — verified focus area.'},
-  {title:'SIEM Monitoring',area:'Cybersecurity',evidence:'TechCiti internship — verified focus area.'},
-  {title:'Incident Response',area:'Cybersecurity',evidence:'TechCiti internship — verified focus area.'},
-  {title:'Log Analysis',area:'Cybersecurity',evidence:'TechCiti internship — verified focus area.'},
-  {title:'Network Analysis',area:'Cybersecurity',evidence:'TechCiti internship — verified focus area.'},
-  {title:'Linux',area:'Cybersecurity',evidence:'TechCiti internship — verified focus area.'},
-  {title:'Prompt Engineering',area:'AI / ML',evidence:'InAmigos internship — verified focus area.'},
-  {title:'Context Engineering',area:'AI / ML',evidence:'InAmigos internship — verified focus area.'},
-  {title:'Generative AI',area:'AI / ML',evidence:'InAmigos internship — verified focus area.'},
-  {title:'Natural Language Processing',area:'AI / ML',evidence:'InAmigos internship — verified focus area.'},
-  {title:'Python',area:'AI / ML',evidence:'InAmigos internship — verified focus area; stronger project/tool evidence remains source-gated.'},
-  {title:'Problem Solving',area:'AI / ML',evidence:'InAmigos internship — verified focus area.'}
- ],
- certs:[
-  {title:'CompTIA Security+ (SY0-401)',type:'Certification',note:'Listed in the project specification; credential source should be attached before publication.'},
-  {title:'CSX Cybersecurity Fundamentals (CSXF)',type:'Certificate · ISACA',note:'Listed in the project specification; credential source should be attached before publication.'},
-  {title:'SC-100 Microsoft Cybersecurity Architect',type:'Self-study',note:'Explicitly classified as self-study; not presented as a professional certification.'},
-  {title:'J.P. Morgan Software Engineering Virtual Experience',type:'Virtual Experience · Forage',note:'Presented as a virtual experience, not a professional certification.'},
-  {title:'Mastercard Cybersecurity Job Simulation',type:'Job Simulation · Forage',note:'Presented as a job simulation, not a professional certification.'}
- ]
-};
-const suggestions=['What cybersecurity experience do you have?','What did you do at TechCiti?','What AI/ML projects have you built?','What did you do at InAmigos?','What are your strongest technical skills?','Show me the cybersecurity résumé.'];
-const $=s=>document.querySelector(s);
-const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-function render(){
- $('#suggestions').replaceChildren(...suggestions.map(q=>{const b=document.createElement('button');b.className='suggestion';b.type='button';b.textContent=q;return b;}));
- $('#projectGrid').innerHTML=DATA.projects.map(p=>`<article class="project-card" data-track="${escapeHtml(p.track)}"><div class="meta"><span>${escapeHtml(p.track==='security'?'Cybersecurity':p.track==='ai'?'AI / ML':p.track==='intersection'?'AI × Security':'Portfolio')}</span><span class="status">${escapeHtml(p.status)}</span></div><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.description)}</p><details><summary>Evidence & status</summary><div class="evidence">${escapeHtml(p.tech)}</div></details></article>`).join('');
- $('#skillGrid').innerHTML=DATA.skills.map(s=>`<article class="skill-card"><div class="meta"><span>${escapeHtml(s.area)}</span></div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.evidence)}</p></article>`).join('');
- $('#certGrid').innerHTML=DATA.certs.map(c=>`<article class="cert-card"><div class="meta"><span>${escapeHtml(c.type)}</span></div><h3>${escapeHtml(c.title)}</h3><p>${escapeHtml(c.note)}</p></article>`).join('');
+const DATA = window.PromptFolioKnowledge.data;
+const answerQuestion = window.PromptFolioKnowledge.answer;
+
+const suggestions = [
+  'What did you do at InAmigos?',
+  'Tell me about this candidate’s AI/ML experience.',
+  'What makes this candidate relevant for a prompt engineering role?',
+  'What did they do at TechCiti?',
+  'Compare their cybersecurity and AI/ML experience.',
+  'Tell me everything you know about this candidate.'
+];
+
+const $ = selector => document.querySelector(selector);
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 }
-function answer(raw){const q=raw.toLowerCase();
- if(/resume|résumé|cv/.test(q)) return {text:`I can identify two résumé tracks: Cybersecurity, tied to TechCiti, and AI/ML, tied to InAmigos. Both verified PDF assets are present in the repository and available from the Résumés section.`,actions:[['View résumé section','#resumes']]};
- if(/techciti|cyber.*experience|siem|soc|security/.test(q)) return {text:`The verified cybersecurity track is a Cyber Security Analyst Intern role at TechCiti Technologies Private Limited. Verified focus areas include Security Operations, SIEM Monitoring, Incident Response, Log Analysis, Network Analysis, and Linux.`,actions:[['View TechCiti experience','#experience'],['View security skills','#skills']]};
- if(/inamigos|prompt|ai\/ml|ai ml|generative|context/.test(q)) return {text:`The verified AI/ML track is a Prompt Engineer Intern role at InAmigos Foundation (IAF). Verified focus areas include Prompt Engineering, Context Engineering, Generative AI, NLP foundations, Python, and problem solving.`,actions:[['View InAmigos experience','#experience'],['View AI/ML skills','#skills']]};
- if(/project|built|work/.test(q)) return {text:`The repository specification names Human-Detection (Concept / Planning), IntelliHire-v3 (Early Prototype), AI-IDS-ES (Design Stage), and a Personal Portfolio Website. Detailed outcomes and technology stacks are intentionally not guessed.`,actions:[['Explore projects','#work']]};
- if(/skill|strongest|know/.test(q)) return {text:`The verified skill model includes SOC Operations, SIEM Monitoring, Incident Response, Log Analysis, Network Analysis, Linux, Prompt Engineering, Context Engineering, Generative AI, NLP foundations, Python, and problem solving.`,actions:[['Explore skills','#skills']]};
- if(/cert/.test(q)) return {text:`The specification lists CompTIA Security+, CSX Cybersecurity Fundamentals, SC-100 self-study, a J.P. Morgan Software Engineering virtual experience, and a Mastercard Cybersecurity job simulation. The UI distinguishes credentials from self-study and simulations.`,actions:[['Review credentials','#certifications']]};
- if(/education|degree|college|university/.test(q)) return {text:`I don't have verified education information in the current repository source. I won't invent a degree, institution, or dates.`,actions:[['View education status','#education']]};
- if(/contact|email|linkedin|github/.test(q)) return {text:`Public contact links have not been supplied in the current repository source. I won't invent an email, GitHub, or LinkedIn URL.`,actions:[['View contact status','#contact']]};
- return {text:`I don't have verified information about that yet. You can explore the Projects or Experience sections for the available details.`,actions:[['Explore projects','#work'],['Explore experience','#experience']]};
+
+function render() {
+  $('#suggestions').replaceChildren(...suggestions.map(question => {
+    const button = document.createElement('button'); button.className = 'suggestion'; button.type = 'button'; button.textContent = question; return button;
+  }));
+
+  $('#projectGrid').replaceChildren(...DATA.projects.map(project => {
+    const article = document.createElement('article'); article.className = 'project-card';
+    article.dataset.track = project.track === 'AI × Cybersecurity' ? 'intersection' : project.track === 'AI/ML' ? 'ai' : 'all';
+    const meta = document.createElement('div'); meta.className = 'meta';
+    const track = document.createElement('span'); track.textContent = project.track;
+    const status = document.createElement('span'); status.className = 'status'; status.textContent = project.status; meta.append(track, status);
+    const heading = document.createElement('h3'); heading.textContent = project.title;
+    const p = document.createElement('p'); p.textContent = project.description;
+    article.append(meta, heading, p); return article;
+  }));
+
+  const skillGroups = [
+    ['Cybersecurity', DATA.skills.cybersecurity], ['AI / ML', DATA.skills.ai_ml], ['Programming', DATA.skills.programming], ['Tools', DATA.skills.tools], ['Operating Systems', DATA.skills.operating_systems]
+  ];
+  $('#skillGrid').replaceChildren(...skillGroups.flatMap(([area, skills]) => skills.map(skill => {
+    const article = document.createElement('article'); article.className = 'skill-card';
+    const meta = document.createElement('div'); meta.className = 'meta'; const label = document.createElement('span'); label.textContent = area; meta.append(label);
+    const heading = document.createElement('h3'); heading.textContent = skill;
+    const p = document.createElement('p'); p.textContent = area === 'Cybersecurity' ? 'Documented through the TechCiti cybersecurity résumé and internship evidence.' : area === 'AI / ML' ? 'Documented through AI/ML résumé, academic profile, and InAmigos evidence.' : 'Documented technical knowledge in the résumé material.';
+    article.append(meta, heading, p); return article;
+  })));
+
+  $('#educationGrid').replaceChildren(...DATA.education.map(item => {
+    const article = document.createElement('article'); article.className = 'cert-card';
+    const meta = document.createElement('div'); meta.className = 'meta'; const date = document.createElement('span'); date.textContent = item.dates; meta.append(date);
+    const heading = document.createElement('h3'); heading.textContent = item.degree; const p = document.createElement('p'); p.textContent = item.institution;
+    article.append(meta, heading, p); return article;
+  }));
+
+  $('#certGrid').replaceChildren(...DATA.certifications.map(certification => {
+    const article = document.createElement('article'); article.className = 'cert-card';
+    const meta = document.createElement('div'); meta.className = 'meta'; const type = document.createElement('span'); type.textContent = certification.type; meta.append(type);
+    const heading = document.createElement('h3'); heading.textContent = certification.title; const p = document.createElement('p');
+    p.textContent = certification.type === 'Self-study' ? 'Explicitly classified as self-study, not a professional certification.' : certification.type.includes('Simulation') || certification.type.includes('Experience') ? 'Presented as practical learning experience, not a professional certification.' : 'Documented credential in the résumé material.';
+    article.append(meta, heading, p); return article;
+  }));
 }
-function addMessage(text,kind='assistant',actions=[]){const el=document.createElement('div');el.className=`message ${kind}`;const label=document.createElement('span');label.className='message-label';label.textContent=kind==='user'?'You':'Portfolio AI';const p=document.createElement('p');p.textContent=text;el.append(label,p);if(actions.length){const nav=document.createElement('div');nav.className='message-actions';actions.forEach(([labelText,href])=>{const a=document.createElement('a');a.href=href;a.className='message-action';a.textContent=labelText;nav.append(a);});el.append(nav);}$('#chatLog').appendChild(el);$('#chatLog').scrollTop=$('#chatLog').scrollHeight;}
-function addTyping(){const el=document.createElement('div');el.className='message assistant typing';el.id='typingIndicator';const label=document.createElement('span');label.className='message-label';label.textContent='Portfolio AI';const p=document.createElement('p');p.textContent='Checking the verified portfolio data…';el.append(label,p);$('#chatLog').appendChild(el);$('#chatLog').scrollTop=$('#chatLog').scrollHeight;}
-function ask(q){const clean=q.trim().slice(0,600);if(!clean)return;addMessage(clean,'user');addTyping();window.setTimeout(()=>{$('#typingIndicator')?.remove();const result=answer(clean);addMessage(result.text,'assistant',result.actions);},180)}
-const menu=$('.sidebar'),menuToggle=$('#menuToggle'),menuClose=$('#menuClose');
-function closeMenu(){menu.classList.remove('open');menuToggle.setAttribute('aria-expanded','false');}
-document.addEventListener('click',e=>{
- if(e.target.matches('.suggestion')){const q=e.target.textContent;$('#heroInput').value=q;ask(q);location.hash='ask';return;}
- if(e.target.matches('.filter')){document.querySelectorAll('.filter').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false')});e.target.classList.add('active');e.target.setAttribute('aria-pressed','true');const f=e.target.dataset.filter;document.querySelectorAll('.project-card').forEach(c=>c.hidden=!(f==='all'||c.dataset.track===f||(f==='ai'&&c.dataset.track==='intersection')))}
+
+function renderAnswerText(container, text) {
+  const fragment = document.createDocumentFragment(); let list = null; let paragraph = [];
+  const flushParagraph = () => { if (!paragraph.length) return; const p = document.createElement('p'); p.textContent = paragraph.join(' ').replace(/\*\*/g, ''); fragment.appendChild(p); paragraph = []; };
+  const flushList = () => { if (!list) return; fragment.appendChild(list); list = null; };
+  String(text).split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed) { flushParagraph(); flushList(); return; }
+    if (trimmed.startsWith('• ')) { flushParagraph(); if (!list) list = document.createElement('ul'); const li = document.createElement('li'); li.textContent = trimmed.slice(2).replace(/\*\*/g, ''); list.appendChild(li); return; }
+    paragraph.push(trimmed);
+  });
+  flushParagraph(); flushList(); container.appendChild(fragment);
+}
+
+function addMessage(text, kind = 'assistant', actionLinks = []) {
+  const element = document.createElement('div'); element.className = `message ${kind}`;
+  const label = document.createElement('span'); label.className = 'message-label'; label.textContent = kind === 'user' ? 'You' : 'Portfolio AI'; element.appendChild(label);
+  if (kind === 'assistant') { const content = document.createElement('div'); content.className = 'message-content'; renderAnswerText(content, text); element.appendChild(content); }
+  else { const p = document.createElement('p'); p.textContent = text; element.appendChild(p); }
+  if (actionLinks.length) {
+    const navigation = document.createElement('div'); navigation.className = 'message-actions';
+    actionLinks.forEach(([labelText, href]) => { const link = document.createElement('a'); link.href = href; link.className = 'message-action'; link.textContent = labelText; navigation.appendChild(link); });
+    element.appendChild(navigation);
+  }
+  $('#chatLog').appendChild(element); $('#chatLog').scrollTop = $('#chatLog').scrollHeight;
+}
+
+function addTyping() {
+  const element = document.createElement('div'); element.className = 'message assistant typing'; element.id = 'typingIndicator';
+  const label = document.createElement('span'); label.className = 'message-label'; label.textContent = 'Portfolio AI'; const p = document.createElement('p'); p.textContent = 'Checking verified portfolio evidence…'; element.append(label, p);
+  $('#chatLog').appendChild(element); $('#chatLog').scrollTop = $('#chatLog').scrollHeight;
+}
+
+function ask(question) {
+  const clean = question.trim().slice(0, 600); if (!clean) return; addMessage(clean, 'user'); addTyping();
+  window.setTimeout(() => { $('#typingIndicator')?.remove(); const result = answerQuestion(clean); addMessage(result.text, 'assistant', result.actions); }, 180);
+}
+
+const menu = $('.sidebar'), menuToggle = $('#menuToggle'), menuClose = $('#menuClose');
+function closeMenu() { menu.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); }
+
+document.addEventListener('click', event => {
+  if (event.target.matches('.suggestion')) { const question = event.target.textContent; $('#heroInput').value = question; ask(question); location.hash = 'ask'; return; }
+  if (event.target.matches('.filter')) {
+    document.querySelectorAll('.filter').forEach(button => { button.classList.remove('active'); button.setAttribute('aria-pressed', 'false'); });
+    event.target.classList.add('active'); event.target.setAttribute('aria-pressed', 'true'); const filter = event.target.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => { card.hidden = !(filter === 'all' || card.dataset.track === filter || (filter === 'ai' && card.dataset.track === 'intersection')); });
+  }
 });
-$('#heroAsk').addEventListener('submit',e=>{e.preventDefault();const q=$('#heroInput').value;ask(q);location.hash='ask'});
-$('#chatForm').addEventListener('submit',e=>{e.preventDefault();const q=$('#chatInput').value;$('#chatInput').value='';ask(q)});
-$('#clearChat').addEventListener('click',()=>{$('#chatLog').replaceChildren();addMessage('Conversation cleared. I answer from verified portfolio data. Ask about experience, projects, skills, certifications, or résumé availability.');$('#chatInput').focus();});
-menuToggle.addEventListener('click',()=>{const open=!menu.classList.contains('open');menu.classList.toggle('open',open);menuToggle.setAttribute('aria-expanded',String(open));if(open)menuClose.focus();});
-menuClose.addEventListener('click',closeMenu);
-document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',closeMenu));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){closeMenu();menuToggle.focus();}});
-document.querySelectorAll('.filter').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false'));
+
+$('#heroAsk').addEventListener('submit', event => { event.preventDefault(); const question = $('#heroInput').value; ask(question); location.hash = 'ask'; });
+$('#chatForm').addEventListener('submit', event => { event.preventDefault(); const question = $('#chatInput').value; $('#chatInput').value = ''; ask(question); });
+$('#clearChat').addEventListener('click', () => { $('#chatLog').replaceChildren(); addMessage('Conversation cleared. Ask about the candidate’s experience, skills, projects, education, certifications, résumé tracks, or career fit.'); $('#chatInput').focus(); });
+menuToggle.addEventListener('click', () => { const open = !menu.classList.contains('open'); menu.classList.toggle('open', open); menuToggle.setAttribute('aria-expanded', String(open)); if (open) menuClose.focus(); });
+menuClose.addEventListener('click', closeMenu);
+document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.classList.contains('open')) { closeMenu(); menuToggle.focus(); } });
+document.querySelectorAll('.filter').forEach(button => button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false'));
 render();
