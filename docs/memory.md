@@ -45,10 +45,10 @@ STATUS: PARTIAL / BLOCKED BY REQUIRED SOURCE MATERIAL AND LIVE VERIFICATION
 
 ## Agent handoff
 TASK: Finish Phase 9 deployment reality check and then close the remaining source-evidence blockers when the required materials are supplied.
-WHAT WAS INSPECTED: current master repository state, six authoritative project files, implementation, CI workflows, and deployment evidence.
-WHAT WAS CHANGED: reorganized project documentation into `docs/` while preserving application files and evidence-safe blocked assets.
+WHAT WAS_INSPECTED: current master repository state, six authoritative project files, implementation, CI workflows, and deployment evidence.
+WHAT WAS_CHANGED: reorganized project documentation into `docs/` while preserving application files and evidence-safe blocked assets.
 WHAT WAS_TESTED: prior merged validation gates passed; deployment run `34306110213` completed successfully.
 RESULT: PARTIAL / BLOCKED.
-EVIDENCE: merge commit `864be520cfd9f8221b3cc4fce44ff590c6816f15`, deployment run `34306110213`.
+EVIDENCE: documentation reorganization commit `2ab0b9e8ecd68f38a12e2bac87daf948474aa951`, deployment run `34306110213`.
 BLOCKERS: résumé PDFs, public contact URLs, education records, detailed project source evidence, and live browser/custom-domain verification.
 NEXT HIGHEST-PRIORITY TASK: verify the current deployment once reachable; then integrate only supplied/verified source assets and re-run the full Definition-of-Done reality check. Do not close Issue #1 until every applicable requirement is evidenced.
