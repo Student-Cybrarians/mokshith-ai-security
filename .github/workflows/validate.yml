@@ -23,6 +23,7 @@ jobs:
           test -f CNAME
           test -f robots.txt
           test -f sitemap.xml
+          test -f PORTFOLIO-CONTENT-CONTRACT.md
           grep -Fxq 'mokshith-ai-security.is-a.dev' CNAME
           grep -Fq 'https://mokshith-ai-security.is-a.dev/' index.html
           grep -Fq 'https://mokshith-ai-security.is-a.dev/sitemap.xml' robots.txt
@@ -31,7 +32,18 @@ jobs:
         run: |
           grep -q 'TechCiti Technologies Private Limited' index.html
           grep -q 'InAmigos Foundation (IAF)' index.html
+          grep -q 'Cybersecurity résumé' PORTFOLIO-CONTENT-CONTRACT.md
+          grep -q 'AI / ML + Prompt Engineering' PORTFOLIO-CONTENT-CONTRACT.md
+          grep -q 'needs-source' PORTFOLIO-CONTENT-CONTRACT.md
+          grep -q 'blocked' PORTFOLIO-CONTENT-CONTRACT.md
           grep -q 'I don.t have verified information' app.js || true
+      - name: Validate no claimed PDF exists without an asset
+        run: |
+          if find . -type f -iname '*.pdf' -not -path './.git/*' | grep -q .; then
+            echo 'PDF assets found; résumé references require manual content verification.'
+          else
+            grep -q 'PDF asset required' index.html
+          fi
       - name: Check for obvious credential material
         run: |
           ! grep -RniE '(sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY)' --exclude-dir=.git .
